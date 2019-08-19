@@ -4,21 +4,12 @@
 # You must provide a value for each of these parameters.
 # ------------------------------------------------------------------------------
 
-variable "domain" {
-  description = "The domain for the IPA server (e.g. example.com)"
-}
-
 variable "hostname" {
   description = "The hostname of this IPA server (e.g. ipa.example.com)"
 }
 
 variable "ip" {
   description = "The IP of this IPA server (e.g. 10.11.1.5)"
-}
-
-variable "is_master" {
-  type        = bool
-  description = "Indicates whether this IPA server is a master (true) or a replica (false)"
 }
 
 variable "zone_id" {
