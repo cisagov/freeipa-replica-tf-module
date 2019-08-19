@@ -85,7 +85,7 @@ data "aws_route53_zone" "public_zone" {
 # Configure the master and replica modules.
 #-------------------------------------------------------------------------------
 module "ipa_master" {
-  source = "../../"
+  source = "github.com/cisagov/freeipa-master-tf-module"
 
   providers = {
     aws     = "aws"
@@ -97,7 +97,6 @@ module "ipa_master" {
   directory_service_pw        = "thepassword"
   domain                      = "cal23.cyber.dhs.gov"
   hostname                    = "ipa.cal23.cyber.dhs.gov"
-  is_master                   = true
   private_reverse_zone_id     = aws_route53_zone.master_private_reverse_zone.zone_id
   private_zone_id             = aws_route53_zone.private_zone.zone_id
   public_zone_id              = data.aws_route53_zone.public_zone.zone_id
@@ -107,7 +106,6 @@ module "ipa_master" {
     Testing = true
   }
   trusted_cidr_blocks = [
-    "10.99.48.0/23",
     "108.31.3.53/32"
   ]
   ttl = 60
@@ -124,7 +122,6 @@ module "ipa_replica1" {
   admin_pw                    = "thepassword"
   associate_public_ip_address = true
   hostname                    = "ipa-replica1.cal23.cyber.dhs.gov"
-  is_master                   = false
   master_hostname             = "ipa.cal23.cyber.dhs.gov"
   private_reverse_zone_id     = aws_route53_zone.replica_private_reverse_zone.zone_id
   private_zone_id             = aws_route53_zone.private_zone.zone_id
