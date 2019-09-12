@@ -59,8 +59,7 @@ fi
 # ignore the "undefined variable" warnings from shellcheck.
 #
 # shellcheck disable=SC2154
-ipa-replica-install --setup-ca \
-                    --admin-password="${admin_pw}" \
+ipa-replica-install --admin-password="${admin_pw}" \
                     --hostname="${hostname}" \
                     --ip-address="$ip_address" \
                     --http-cert-file=/etc/ipa/cert.p12 \
