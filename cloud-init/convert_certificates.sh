@@ -12,9 +12,9 @@ set -o pipefail
 # include all that, so we need to grab the missing pieces.
 #
 # See https://letsencrypt.org/certificates/ for more details.
-curl -o /etc/ipa/isrgrootx1.pem \
+curl --silent --output /etc/ipa/isrgrootx1.pem \
      https://letsencrypt.org/certs/isrgrootx1.pem.txt
-curl -o /etc/ipa/trustid-x3-root.pem \
+curl --silent --output /etc/ipa/trustid-x3-root.pem \
      https://letsencrypt.org/certs/trustid-x3-root.pem.txt
 
 # Convert the PEMs to PKCS#12 format
