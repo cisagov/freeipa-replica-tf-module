@@ -8,6 +8,18 @@ variable "admin_pw" {
   description = "The password for the Kerberos admin role"
 }
 
+variable "cert_bucket_name" {
+  description = "The name of the AWS S3 bucket where certificates are stored"
+}
+
+variable "cert_pw" {
+  description = "The password used to protect the PKCS#12 certificates"
+}
+
+variable "cert_read_role_arn" {
+  description = "The ARN of the delegated role that allows the relevent certificates to be read from the appropriate S3 bucket"
+}
+
 variable "hostname" {
   description = "The hostname of this IPA replica (e.g. ipa-replica.example.com)"
 }
@@ -37,7 +49,7 @@ variable "subnet_id" {
 
 variable "ami_owner_account_id" {
   description = "The ID of the AWS account that owns the FreeIPA server AMI"
-  default     = "344440683180" # CISA NCATS CyHy production (Raytheon) account
+  default     = "563873274798" # CISA NCATS Playground account
 }
 
 variable "associate_public_ip_address" {
