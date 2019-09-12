@@ -4,6 +4,10 @@
 module "private_zone" {
   source = "./route53_zone"
 
+  providers = {
+    aws = "aws"
+  }
+
   hostname = var.hostname
   ip       = var.private_ip
   ttl      = var.ttl
@@ -12,6 +16,10 @@ module "private_zone" {
 
 module "public_zone" {
   source = "./route53_zone"
+
+  providers = {
+    aws = "aws.public_dns"
+  }
 
   do_it    = var.associate_public_ip_address
   hostname = var.hostname
