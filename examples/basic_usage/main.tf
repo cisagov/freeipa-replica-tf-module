@@ -1,5 +1,12 @@
 provider "aws" {
-  region = "us-west-1"
+  region  = "us-east-2"
+  profile = "playground"
+}
+
+provider "aws" {
+  region  = "us-east-1"
+  profile = "default"
+  alias   = "public_dns"
 }
 
 #-------------------------------------------------------------------------------
@@ -13,13 +20,13 @@ resource "aws_vpc" "the_vpc" {
 resource "aws_subnet" "master_subnet" {
   vpc_id            = aws_vpc.the_vpc.id
   cidr_block        = "10.99.48.0/24"
-  availability_zone = "us-west-1b"
+  availability_zone = "us-east-2a"
 }
 
 resource "aws_subnet" "replica_subnet" {
   vpc_id            = aws_vpc.the_vpc.id
   cidr_block        = "10.99.49.0/24"
-  availability_zone = "us-west-1c"
+  availability_zone = "us-east-2b"
 }
 
 #-------------------------------------------------------------------------------
@@ -78,6 +85,8 @@ resource "aws_route53_zone" "replica_private_reverse_zone" {
 # Create a data resource for the existing public Route53 zone.
 #-------------------------------------------------------------------------------
 data "aws_route53_zone" "public_zone" {
+  provider = aws.public_dns
+
   name = "cyber.dhs.gov."
 }
 
@@ -88,12 +97,15 @@ module "ipa_master" {
   source = "github.com/cisagov/freeipa-master-tf-module"
 
   providers = {
-    aws     = "aws"
-    aws.dns = "aws"
+    aws            = "aws"
+    aws.public_dns = "aws.public_dns"
   }
 
   admin_pw                    = "thepassword"
   associate_public_ip_address = true
+  cert_bucket_name            = "cool-certificates"
+  cert_pw                     = "lemmy"
+  cert_read_role_arn          = "arn:aws:iam::351049339218:role/ReadCert-ipa.cal23.cyber.dhs.gov"
   directory_service_pw        = "thepassword"
   domain                      = "cal23.cyber.dhs.gov"
   hostname                    = "ipa.cal23.cyber.dhs.gov"
@@ -106,7 +118,8 @@ module "ipa_master" {
     Testing = true
   }
   trusted_cidr_blocks = [
-    "108.31.3.53/32"
+    "108.31.3.53/32",
+    "64.69.57.0/24",
   ]
   ttl = 60
 }
@@ -115,12 +128,15 @@ module "ipa_replica1" {
   source = "../../"
 
   providers = {
-    aws     = "aws"
-    aws.dns = "aws"
+    aws            = "aws"
+    aws.public_dns = "aws.public_dns"
   }
 
   admin_pw                    = "thepassword"
   associate_public_ip_address = true
+  cert_bucket_name            = "cool-certificates"
+  cert_pw                     = "lemmy"
+  cert_read_role_arn          = "arn:aws:iam::351049339218:role/ReadCert-ipa-replica1.cal23.cyber.dhs.gov"
   hostname                    = "ipa-replica1.cal23.cyber.dhs.gov"
   master_hostname             = "ipa.cal23.cyber.dhs.gov"
   private_reverse_zone_id     = aws_route53_zone.replica_private_reverse_zone.zone_id
