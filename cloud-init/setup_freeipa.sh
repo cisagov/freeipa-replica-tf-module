@@ -3,6 +3,7 @@
 # Input variables are:
 # admin_pw - the admin password for the IPA server's Kerberos admin
 # role
+# cert_pw - the password associated with the PKCS#12 certificate
 # hostname - the hostname of this IPA replica server
 # (e.g. ipa-replica.example.com)
 # master_hostname - the hostname of the IPA master server
@@ -58,9 +59,13 @@ fi
 # ignore the "undefined variable" warnings from shellcheck.
 #
 # shellcheck disable=SC2154
-ipa-replica-install --setup-ca \
-                    --admin-password="${admin_pw}" \
+ipa-replica-install --admin-password="${admin_pw}" \
                     --hostname="${hostname}" \
                     --ip-address="$ip_address" \
+                    --http-cert-file=/etc/ipa/cert.p12 \
+                    --http-pin="${cert_pw}" \
+                    --dirsrv-cert-file=/etc/ipa/cert.p12 \
+                    --dirsrv-pin="${cert_pw}" \
                     --no-ntp \
+                    --no-pkinit \
                     --unattended

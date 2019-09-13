@@ -13,6 +13,9 @@ module "ipa_replica" {
   admin_pw                    = "thepassword"
   associate_public_ip_address = true
   aws_instance_type           = "t3.large"
+  cert_bucket_name            = "certbucket"
+  cert_pw                     = "lemmy"
+  cert_read_role_arn          = "arn:aws:iam::123456789012:role/ReadCert-example.com"
   hostname                    = "ipa-replica1.example.com"
   private_reverse_zone_id     = "ZLY47KYR9X93M"
   private_zone_id             = "ZKX36JXQ8W82L"
@@ -39,6 +42,9 @@ module "ipa_replica" {
 | admin_pw | The admin password for the Kerberos admin role | string | | yes |
 | associate_public_ip_address | Whether or not to associate a public IP address with the IPA server | bool | `false` | no |
 | aws_instance_type | The AWS instance type to deploy (e.g. t3.medium).  Two gigabytes of RAM is given as a minimum requirement for FreeIPA, but I have had intermittent problems when creating t3.small replicas. | string | `t3.medium` | no |
+| cert_bucket_name | The name of the AWS S3 bucket where certificates are stored | string | | yes |
+| cert_pw | The password used to protect the PKCS#12 certificates | string | | yes |
+| cert_read_role_arn | The ARN of the delegated role that allows the relevent certificates to be read from the appropriate S3 bucket | string | | yes |
 | hostname | The hostname of this IPA replica (e.g. `ipa-replica.example.com`) | string | | yes |
 | master_hostname | The hostname of the IPA master (e.g. ipa.example.com).  Only necessary if you want the replica to delay installation until the master becomes available. | string | Empty string | no |
 | private_reverse_zone_id | The zone ID corresponding to the private Route53 reverse zone where the PTR records related to this IPA replica should be created (e.g. `ZKX36JXQ8W82L`) | string | | yes |
