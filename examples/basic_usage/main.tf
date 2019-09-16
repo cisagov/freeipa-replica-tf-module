@@ -9,6 +9,12 @@ provider "aws" {
   alias   = "public_dns"
 }
 
+provider "aws" {
+  region  = "us-east-1"
+  profile = "certreadrole-role"
+  alias   = "cert_read_role"
+}
+
 #-------------------------------------------------------------------------------
 # Create two subnets inside a VPC.
 #-------------------------------------------------------------------------------
@@ -91,6 +97,38 @@ data "aws_route53_zone" "public_zone" {
 }
 
 #-------------------------------------------------------------------------------
+# Create roles that allows the master and replica to read their certs
+# from S3.
+# -------------------------------------------------------------------------------
+module "certreadrole_master" {
+  source = "github.com/cisagov/cert-read-role-tf-module"
+
+  providers = {
+    aws = "aws.cert_read_role"
+  }
+
+  account_ids = [
+    "563873274798" # The playground account ID
+  ]
+  cert_bucket_name = "cool-certificates"
+  hostname         = "ipa.cal23.cyber.dhs.gov"
+}
+
+module "certreadrole_replica" {
+  source = "github.com/cisagov/cert-read-role-tf-module"
+
+  providers = {
+    aws = "aws.cert_read_role"
+  }
+
+  account_ids = [
+    "563873274798" # The playground account ID
+  ]
+  cert_bucket_name = "cool-certificates"
+  hostname         = "ipa-replica1.cal23.cyber.dhs.gov"
+}
+
+#-------------------------------------------------------------------------------
 # Configure the master and replica modules.
 #-------------------------------------------------------------------------------
 module "ipa_master" {
@@ -105,7 +143,7 @@ module "ipa_master" {
   associate_public_ip_address = true
   cert_bucket_name            = "cool-certificates"
   cert_pw                     = "lemmy"
-  cert_read_role_arn          = "arn:aws:iam::351049339218:role/ReadCert-ipa.cal23.cyber.dhs.gov"
+  cert_read_role_arn          = module.certreadrole_master.arn
   directory_service_pw        = "thepassword"
   domain                      = "cal23.cyber.dhs.gov"
   hostname                    = "ipa.cal23.cyber.dhs.gov"
@@ -136,7 +174,7 @@ module "ipa_replica1" {
   associate_public_ip_address = true
   cert_bucket_name            = "cool-certificates"
   cert_pw                     = "lemmy"
-  cert_read_role_arn          = "arn:aws:iam::351049339218:role/ReadCert-ipa-replica1.cal23.cyber.dhs.gov"
+  cert_read_role_arn          = module.certreadrole_replica.arn
   hostname                    = "ipa-replica1.cal23.cyber.dhs.gov"
   master_hostname             = "ipa.cal23.cyber.dhs.gov"
   private_reverse_zone_id     = aws_route53_zone.replica_private_reverse_zone.zone_id
