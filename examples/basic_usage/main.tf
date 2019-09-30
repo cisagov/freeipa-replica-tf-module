@@ -155,13 +155,8 @@ module "ipa_master" {
   tags = {
     Testing = true
   }
-  trusted_cidr_blocks = [
-    "108.31.3.53/32",
-    "96.255.220.144/32",
-    "100.27.42.248/32",
-    "64.69.57.0/24",
-  ]
-  ttl = 60
+  trusted_cidr_blocks = var.trusted_cidr_blocks
+  ttl                 = 60
 }
 
 module "ipa_replica1" {
