@@ -139,7 +139,7 @@ module "ipa_master" {
     aws.public_dns = "aws.public_dns"
   }
 
-  admin_pw                    = "thepassword"
+  admin_pw                    = var.admin_pw
   associate_public_ip_address = true
   cert_bucket_name            = "cool-certificates"
   cert_pw                     = "lemmy"
@@ -167,7 +167,7 @@ module "ipa_replica1" {
     aws.public_dns = "aws.public_dns"
   }
 
-  admin_pw                    = "thepassword"
+  admin_pw                    = var.admin_pw
   associate_public_ip_address = true
   cert_bucket_name            = "cool-certificates"
   cert_pw                     = "lemmy"
