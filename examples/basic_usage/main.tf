@@ -4,15 +4,15 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias   = "public_dns"
   region  = "us-east-1"
   profile = "default"
-  alias   = "public_dns"
 }
 
 provider "aws" {
+  alias   = "cert_read_role"
   region  = "us-east-1"
   profile = "certreadrole-role"
-  alias   = "cert_read_role"
 }
 
 #-------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ module "ipa_master" {
     aws.public_dns = "aws.public_dns"
   }
 
-  admin_pw                    = "thepassword"
+  admin_pw                    = var.admin_pw
   associate_public_ip_address = true
   cert_bucket_name            = "cool-certificates"
   cert_pw                     = "lemmy"
@@ -167,7 +167,7 @@ module "ipa_replica1" {
     aws.public_dns = "aws.public_dns"
   }
 
-  admin_pw                    = "thepassword"
+  admin_pw                    = var.admin_pw
   associate_public_ip_address = true
   cert_bucket_name            = "cool-certificates"
   cert_pw                     = "lemmy"

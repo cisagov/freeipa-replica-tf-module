@@ -1,4 +1,14 @@
 # ------------------------------------------------------------------------------
+# Required parameters
+#
+# You must provide a value for each of these parameters.
+# ------------------------------------------------------------------------------
+
+variable "admin_pw" {
+  description = "The password for the Kerberos admin role"
+}
+
+# ------------------------------------------------------------------------------
 # Optional parameters
 #
 # These parameters have reasonable defaults.
