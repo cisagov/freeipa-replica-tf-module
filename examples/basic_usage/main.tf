@@ -4,15 +4,15 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias   = "public_dns"
   region  = "us-east-1"
   profile = "default"
-  alias   = "public_dns"
 }
 
 provider "aws" {
+  alias   = "cert_read_role"
   region  = "us-east-1"
   profile = "certreadrole-role"
-  alias   = "cert_read_role"
 }
 
 #-------------------------------------------------------------------------------
