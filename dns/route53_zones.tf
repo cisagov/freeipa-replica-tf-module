@@ -5,7 +5,7 @@ module "private_zone" {
   source = "./route53_zone"
 
   providers = {
-    aws = "aws"
+    aws = aws
   }
 
   hostname = var.hostname
@@ -18,7 +18,7 @@ module "public_zone" {
   source = "./route53_zone"
 
   providers = {
-    aws = "aws.public_dns"
+    aws = aws.public_dns
   }
 
   do_it    = var.associate_public_ip_address
