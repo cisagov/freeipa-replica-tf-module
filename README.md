@@ -1,6 +1,6 @@
 # freeipa-replica-tf-module #
 
-[![Build Status](https://travis-ci.com/cisagov/freeipa-replica-tf-module.svg?branch=develop)](https://travis-ci.com/cisagov/freeipa-replica-tf-module)
+[![GitHub Build Status](https://github.com/cisagov/freeipa-replica-tf-module/workflows/build/badge.svg)](https://github.com/cisagov/freeipa-replica-tf-module/actions)
 
 A Terraform module for deploying a FreeIPA replica into a VPC.
 
