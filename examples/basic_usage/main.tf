@@ -56,7 +56,6 @@ resource "aws_route" "route_external_traffic_through_internet_gateway" {
   gateway_id             = aws_internet_gateway.the_igw.id
 }
 
-
 #-------------------------------------------------------------------------------
 # Create a private Route53 zone.
 #-------------------------------------------------------------------------------
