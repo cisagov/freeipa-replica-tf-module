@@ -5,39 +5,39 @@
 # ------------------------------------------------------------------------------
 
 variable "admin_pw" {
-  description = "The password for the Kerberos admin role"
+  description = "The password for the Kerberos admin role."
 }
 
 variable "cert_bucket_name" {
-  description = "The name of the AWS S3 bucket where certificates are stored"
+  description = "The name of the AWS S3 bucket where certificates are stored."
 }
 
 variable "cert_pw" {
-  description = "The password used to protect the PKCS#12 certificates"
+  description = "The password used to protect the PKCS#12 certificates."
 }
 
 variable "cert_read_role_arn" {
-  description = "The ARN of the delegated role that allows the relevent certificates to be read from the appropriate S3 bucket"
+  description = "The ARN of the delegated role that allows the relevent certificates to be read from the appropriate S3 bucket."
 }
 
 variable "hostname" {
-  description = "The hostname of this IPA replica (e.g. ipa-replica.example.com)"
+  description = "The hostname of this IPA replica (e.g. ipa-replica.example.com)."
 }
 
 variable "private_reverse_zone_id" {
-  description = "The zone ID corresponding to the private Route53 reverse zone where the PTR records related to this IPA replica should be created (e.g. ZKX36JXQ8W82L)"
+  description = "The zone ID corresponding to the private Route53 reverse zone where the PTR records related to this IPA replica should be created (e.g. ZKX36JXQ8W82L)."
 }
 
 variable "private_zone_id" {
-  description = "The zone ID corresponding to the private Route53 zone where the Kerberos-related DNS records should be created (e.g. ZKX36JXQ8W82L)"
+  description = "The zone ID corresponding to the private Route53 zone where the Kerberos-related DNS records should be created (e.g. ZKX36JXQ8W82L)."
 }
 
 variable "server_security_group_id" {
-  description = "The ID for the IPA server security group (e.g. sg-0123456789abcdef0)"
+  description = "The ID for the IPA server security group (e.g. sg-0123456789abcdef0)."
 }
 
 variable "subnet_id" {
-  description = "The ID of the AWS subnet into which to deploy this IPA replica (e.g. subnet-0123456789abcdef0)"
+  description = "The ID of the AWS subnet into which to deploy this IPA replica (e.g. subnet-0123456789abcdef0)."
 }
 
 # ------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ variable "ami_owner_account_id" {
 
 variable "associate_public_ip_address" {
   type        = bool
-  description = "Whether or not to associate a public IP address with the IPA replica"
+  description = "Whether or not to associate a public IP address with the IPA replica."
   default     = false
 }
 
@@ -75,7 +75,7 @@ variable "public_zone_id" {
 
 variable "tags" {
   type        = map(string)
-  description = "Tags to apply to all AWS resources created"
+  description = "Tags to apply to all AWS resources created."
   default     = {}
 }
 
