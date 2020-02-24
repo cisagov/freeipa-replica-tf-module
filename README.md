@@ -59,7 +59,7 @@ module "ipa_replica" {
 
 | Name | Description |
 |------|-------------|
-| id | The EC2 instance ID corresponding to the IPA replica. |
+| replica | The IPA replica EC2 instance. |
 
 ## Contributing ##
 
