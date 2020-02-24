@@ -1,18 +1,18 @@
 provider "aws" {
-  region  = "us-east-2"
-  profile = "playground"
+  profile = "cool-sharedservices-provisionaccount"
+  region  = "us-east-1"
 }
 
 provider "aws" {
   alias   = "public_dns"
+  profile = "cool-olddns-route53fullaccess"
   region  = "us-east-1"
-  profile = "default"
 }
 
 provider "aws" {
   alias   = "cert_read_role"
+  profile = "cool-dns-provisioncertificatereadroles"
   region  = "us-east-1"
-  profile = "certreadrole-role"
 }
 
 #-------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ module "certreadrole_master" {
   }
 
   account_ids = [
-    "563873274798" # The playground account ID
+    "236526679726" # The COOL Users account
   ]
   cert_bucket_name = "cool-certificates"
   hostname         = "ipa.cal23.cyber.dhs.gov"
@@ -122,7 +122,7 @@ module "certreadrole_replica" {
   }
 
   account_ids = [
-    "563873274798" # The playground account ID
+    "236526679726" # The COOL Users account
   ]
   cert_bucket_name = "cool-certificates"
   hostname         = "ipa-replica1.cal23.cyber.dhs.gov"
@@ -140,8 +140,9 @@ module "ipa_master" {
   }
 
   admin_pw                    = var.admin_pw
+  ami_owner_account_id        = "207871073513" # The COOL Images account
   associate_public_ip_address = true
-  cert_bucket_name            = "cool-certificates"
+  cert_bucket_name            = "cisa-cool-certificates"
   cert_pw                     = "lemmy"
   cert_read_role_arn          = module.certreadrole_master.arn
   directory_service_pw        = "thepassword"
@@ -168,8 +169,9 @@ module "ipa_replica1" {
   }
 
   admin_pw                    = var.admin_pw
+  ami_owner_account_id        = "207871073513" # The COOL Images account
   associate_public_ip_address = true
-  cert_bucket_name            = "cool-certificates"
+  cert_bucket_name            = "cisa-cool-certificates"
   cert_pw                     = "lemmy"
   cert_read_role_arn          = module.certreadrole_replica.arn
   hostname                    = "ipa-replica1.cal23.cyber.dhs.gov"
