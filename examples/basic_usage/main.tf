@@ -146,7 +146,7 @@ module "ipa_master" {
   associate_public_ip_address = true
   cert_bucket_name            = "cisa-cool-certificates"
   cert_pw                     = "lemmy"
-  cert_read_role_arn          = module.certreadrole_master.arn
+  cert_read_role_arn          = module.certreadrole_master.role.arn
   directory_service_pw        = "thepassword"
   domain                      = "cal23.cyber.dhs.gov"
   hostname                    = "ipa.cal23.cyber.dhs.gov"
@@ -175,13 +175,13 @@ module "ipa_replica1" {
   associate_public_ip_address = true
   cert_bucket_name            = "cisa-cool-certificates"
   cert_pw                     = "lemmy"
-  cert_read_role_arn          = module.certreadrole_replica.arn
+  cert_read_role_arn          = module.certreadrole_replica.role.arn
   hostname                    = "ipa-replica1.cal23.cyber.dhs.gov"
   master_hostname             = "ipa.cal23.cyber.dhs.gov"
   private_reverse_zone_id     = aws_route53_zone.replica_private_reverse_zone.zone_id
   private_zone_id             = aws_route53_zone.private_zone.zone_id
   public_zone_id              = data.aws_route53_zone.public_zone.zone_id
-  server_security_group_id    = module.ipa_master.server_security_group_id
+  server_security_group_id    = module.ipa_master.server_security_group.id
   subnet_id                   = aws_subnet.replica_subnet.id
   tags = {
     Testing = true
