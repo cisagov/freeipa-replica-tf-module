@@ -112,7 +112,7 @@ module "certreadrole_master" {
   account_ids = [
     data.aws_caller_identity.shared_services.account_id,
   ]
-  cert_bucket_name = "cool-certificates"
+  cert_bucket_name = "cisa-cool-certificates"
   hostname         = "ipa.cal23.cyber.dhs.gov"
 }
 
@@ -126,7 +126,7 @@ module "certreadrole_replica" {
   account_ids = [
     data.aws_caller_identity.shared_services.account_id,
   ]
-  cert_bucket_name = "cool-certificates"
+  cert_bucket_name = "cisa-cool-certificates"
   hostname         = "ipa-replica1.cal23.cyber.dhs.gov"
 }
 
