@@ -103,7 +103,7 @@ module "certreadrole_master" {
   source = "github.com/cisagov/cert-read-role-tf-module"
 
   providers = {
-    aws = "aws.cert_read_role"
+    aws = aws.cert_read_role
   }
 
   account_ids = [
@@ -117,7 +117,7 @@ module "certreadrole_replica" {
   source = "github.com/cisagov/cert-read-role-tf-module"
 
   providers = {
-    aws = "aws.cert_read_role"
+    aws = aws.cert_read_role
   }
 
   account_ids = [
@@ -134,8 +134,8 @@ module "ipa_master" {
   source = "github.com/cisagov/freeipa-master-tf-module"
 
   providers = {
-    aws            = "aws"
-    aws.public_dns = "aws.public_dns"
+    aws            = aws
+    aws.public_dns = aws.public_dns
   }
 
   admin_pw                    = var.admin_pw
@@ -163,8 +163,8 @@ module "ipa_replica1" {
   source = "../../"
 
   providers = {
-    aws            = "aws"
-    aws.public_dns = "aws.public_dns"
+    aws            = aws
+    aws.public_dns = aws.public_dns
   }
 
   admin_pw                    = var.admin_pw
