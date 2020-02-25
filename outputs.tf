@@ -1,4 +1,4 @@
-output "id" {
-  value       = aws_instance.ipa.id
-  description = "The EC2 instance ID corresponding to the IPA server"
+output "replica" {
+  value       = aws_instance.ipa
+  description = "The IPA replica EC2 instance."
 }

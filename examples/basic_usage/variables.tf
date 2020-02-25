@@ -5,7 +5,7 @@
 # ------------------------------------------------------------------------------
 
 variable "admin_pw" {
-  description = "The password for the Kerberos admin role"
+  description = "The password for the Kerberos admin role."
 }
 
 # ------------------------------------------------------------------------------
@@ -16,6 +16,6 @@ variable "admin_pw" {
 
 variable "trusted_cidr_blocks" {
   type        = list(string)
-  description = "A list of the CIDR blocks outside the VPC that are allowed to access the IPA servers (e.g. [\"10.10.0.0/16\", \"10.11.0.0/16\"])"
+  description = "A list of the CIDR blocks outside the VPC that are allowed to access the IPA servers (e.g. [\"10.10.0.0/16\", \"10.11.0.0/16\"])."
   default     = []
 }

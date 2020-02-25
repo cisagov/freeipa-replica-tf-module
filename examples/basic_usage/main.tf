@@ -1,18 +1,18 @@
 provider "aws" {
-  region  = "us-east-2"
-  profile = "playground"
+  profile = "cool-sharedservices-provisionaccount"
+  region  = "us-east-1"
 }
 
 provider "aws" {
   alias   = "public_dns"
+  profile = "cool-olddns-route53fullaccess"
   region  = "us-east-1"
-  profile = "default"
 }
 
 provider "aws" {
   alias   = "cert_read_role"
+  profile = "cool-dns-provisioncertificatereadroles"
   region  = "us-east-1"
-  profile = "certreadrole-role"
 }
 
 #-------------------------------------------------------------------------------
@@ -26,13 +26,13 @@ resource "aws_vpc" "the_vpc" {
 resource "aws_subnet" "master_subnet" {
   vpc_id            = aws_vpc.the_vpc.id
   cidr_block        = "10.99.48.0/24"
-  availability_zone = "us-east-2a"
+  availability_zone = "us-east-1a"
 }
 
 resource "aws_subnet" "replica_subnet" {
   vpc_id            = aws_vpc.the_vpc.id
   cidr_block        = "10.99.49.0/24"
-  availability_zone = "us-east-2b"
+  availability_zone = "us-east-1b"
 }
 
 #-------------------------------------------------------------------------------
@@ -55,7 +55,6 @@ resource "aws_route" "route_external_traffic_through_internet_gateway" {
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.the_igw.id
 }
-
 
 #-------------------------------------------------------------------------------
 # Create a private Route53 zone.
@@ -100,17 +99,20 @@ data "aws_route53_zone" "public_zone" {
 # Create roles that allows the master and replica to read their certs
 # from S3.
 # -------------------------------------------------------------------------------
+data "aws_caller_identity" "shared_services" {
+}
+
 module "certreadrole_master" {
   source = "github.com/cisagov/cert-read-role-tf-module"
 
   providers = {
-    aws = "aws.cert_read_role"
+    aws = aws.cert_read_role
   }
 
   account_ids = [
-    "563873274798" # The playground account ID
+    data.aws_caller_identity.shared_services.account_id,
   ]
-  cert_bucket_name = "cool-certificates"
+  cert_bucket_name = "cisa-cool-certificates"
   hostname         = "ipa.cal23.cyber.dhs.gov"
 }
 
@@ -118,13 +120,13 @@ module "certreadrole_replica" {
   source = "github.com/cisagov/cert-read-role-tf-module"
 
   providers = {
-    aws = "aws.cert_read_role"
+    aws = aws.cert_read_role
   }
 
   account_ids = [
-    "563873274798" # The playground account ID
+    data.aws_caller_identity.shared_services.account_id,
   ]
-  cert_bucket_name = "cool-certificates"
+  cert_bucket_name = "cisa-cool-certificates"
   hostname         = "ipa-replica1.cal23.cyber.dhs.gov"
 }
 
@@ -135,15 +137,16 @@ module "ipa_master" {
   source = "github.com/cisagov/freeipa-master-tf-module"
 
   providers = {
-    aws            = "aws"
-    aws.public_dns = "aws.public_dns"
+    aws            = aws
+    aws.public_dns = aws.public_dns
   }
 
   admin_pw                    = var.admin_pw
+  ami_owner_account_id        = "207871073513" # The COOL Images account
   associate_public_ip_address = true
-  cert_bucket_name            = "cool-certificates"
+  cert_bucket_name            = "cisa-cool-certificates"
   cert_pw                     = "lemmy"
-  cert_read_role_arn          = module.certreadrole_master.arn
+  cert_read_role_arn          = module.certreadrole_master.role.arn
   directory_service_pw        = "thepassword"
   domain                      = "cal23.cyber.dhs.gov"
   hostname                    = "ipa.cal23.cyber.dhs.gov"
@@ -163,21 +166,22 @@ module "ipa_replica1" {
   source = "../../"
 
   providers = {
-    aws            = "aws"
-    aws.public_dns = "aws.public_dns"
+    aws            = aws
+    aws.public_dns = aws.public_dns
   }
 
   admin_pw                    = var.admin_pw
+  ami_owner_account_id        = "207871073513" # The COOL Images account
   associate_public_ip_address = true
-  cert_bucket_name            = "cool-certificates"
+  cert_bucket_name            = "cisa-cool-certificates"
   cert_pw                     = "lemmy"
-  cert_read_role_arn          = module.certreadrole_replica.arn
+  cert_read_role_arn          = module.certreadrole_replica.role.arn
   hostname                    = "ipa-replica1.cal23.cyber.dhs.gov"
   master_hostname             = "ipa.cal23.cyber.dhs.gov"
   private_reverse_zone_id     = aws_route53_zone.replica_private_reverse_zone.zone_id
   private_zone_id             = aws_route53_zone.private_zone.zone_id
   public_zone_id              = data.aws_route53_zone.public_zone.zone_id
-  server_security_group_id    = module.ipa_master.server_security_group_id
+  server_security_group_id    = module.ipa_master.server_security_group.id
   subnet_id                   = aws_subnet.replica_subnet.id
   tags = {
     Testing = true
