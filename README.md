@@ -61,6 +61,12 @@ module "ipa_replica" {
 |------|-------------|
 | replica | The IPA replica EC2 instance. |
 
+## Notes ##
+
+Running `pre-commit` requires running `terraform init` in every directory that
+contains Terraform code. In this repository, these are the main directory and
+every directory under `examples/`.
+
 ## Contributing ##
 
 We welcome contributions!  Please see [here](CONTRIBUTING.md) for
