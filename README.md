@@ -79,7 +79,7 @@ module "ipa_replica" {
 Running `pre-commit` requires running `terraform init` in every
 directory that contains Terraform code. In this repository, these are
 the main directory and the `dns` and `dns/route53` directories under
-the main directory, a well as every directory under `examples/`.
+the main directory, as well as every directory under `examples/`.
 
 ## Contributing ##
 
